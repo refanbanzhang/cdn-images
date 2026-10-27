@@ -57,6 +57,18 @@ def thumb_path_for(src: Path) -> Path:
     return THUMBS / f"{src.stem}.webp"
 
 
+def make_thumb_pillow(src: Path, dest: Path) -> None:
+    try:
+        from PIL import Image
+    except ImportError as exc:
+        raise SyncError("ffmpeg libwebp or Pillow is required to generate wallpaper thumbs") from exc
+
+    with Image.open(src) as img:
+        img = img.convert("RGBA" if "A" in img.getbands() else "RGB")
+        img.thumbnail((THUMB_LONG_EDGE, THUMB_LONG_EDGE), Image.Resampling.LANCZOS)
+        img.save(dest, "WEBP", quality=int(THUMB_QUALITY), method=6)
+
+
 def make_thumb(src: Path, dest: Path) -> None:
     dest.parent.mkdir(parents=True, exist_ok=True)
     if dest.is_file() and dest.stat().st_size > 0:
@@ -84,10 +96,10 @@ def make_thumb(src: Path, dest: Path) -> None:
     ]
     try:
         subprocess.run(cmd, check=True)
-    except FileNotFoundError as exc:
-        raise SyncError("ffmpeg is required to generate wallpaper thumbs") from exc
-    except subprocess.CalledProcessError as exc:
-        raise SyncError(f"failed to generate thumb for {src.name}") from exc
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        if dest.is_file():
+            dest.unlink()
+        make_thumb_pillow(src, dest)
     if not dest.is_file() or dest.stat().st_size == 0:
         raise SyncError(f"empty thumb written for {src.name}")
 

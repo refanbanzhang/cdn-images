@@ -59,6 +59,8 @@ def thumb_path_for(src: Path) -> Path:
 
 def make_thumb(src: Path, dest: Path) -> None:
     dest.parent.mkdir(parents=True, exist_ok=True)
+    if dest.is_file() and dest.stat().st_size > 0:
+        return
     cmd = [
         "ffmpeg",
         "-hide_banner",
@@ -126,8 +128,16 @@ def main() -> int:
         item = catalog_item(src)
         if item["type"] == "image":
             dest = thumb_path_for(src)
-            make_thumb(src, dest)
-            keep_thumbs.add(dest)
+            try:
+                make_thumb(src, dest)
+                keep_thumbs.add(dest)
+            except SyncError as exc:
+                if dest.is_file() and dest.stat().st_size > 0:
+                    keep_thumbs.add(dest)
+                    print(f"warning: reused existing thumb for {src.name}: {exc}", file=sys.stderr)
+                else:
+                    item.pop("thumb", None)
+                    print(f"warning: no thumb for {src.name}: {exc}", file=sys.stderr)
         items.append(item)
 
     prune_orphan_thumbs(keep_thumbs)

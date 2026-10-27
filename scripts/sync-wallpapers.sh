@@ -82,33 +82,7 @@ git pull --ff-only origin main
 mkdir -p wallpapers
 # Preserve gallery thumbs/; sync media from Desktop source
 rsync -a --delete --exclude 'index.json' --exclude 'thumbs' \"\$STAGE/\" \"\$REPO/wallpapers/\"
-python3 - <<'PY'
-import json
-from pathlib import Path
-from datetime import datetime, timezone
-root = Path('wallpapers')
-thumbs = root / 'thumbs'
-image_ext = {'.jpg','.jpeg','.png','.webp','.gif','.bmp','.heic','.avif'}
-video_ext = {'.mp4','.webm','.ogv','.mov','.m4v','.mkv'}
-items = []
-for p in sorted(root.iterdir(), key=lambda x: x.name):
-    if not p.is_file():
-        continue
-    if p.name.startswith('.') or p.name == 'index.json' or p.name.startswith('._'):
-        continue
-    ext = p.suffix.lower()
-    if ext in image_ext:
-        item = {'path': f'wallpapers/{p.name}', 'name': p.name, 'title': p.stem, 'type': 'image', 'ext': ext.lstrip('.'), 'size': p.stat().st_size}
-        thumb = thumbs / f'{p.stem}.webp'
-        if thumb.is_file():
-            item['thumb'] = f'wallpapers/thumbs/{thumb.name}'
-        items.append(item)
-    elif ext in video_ext:
-        items.append({'path': f'wallpapers/{p.name}', 'name': p.name, 'title': p.stem, 'type': 'video', 'ext': ext.lstrip('.'), 'size': p.stat().st_size})
-data = {'updatedAt': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'), 'items': items}
-(root / 'index.json').write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-print(len(items))
-PY
+python3 \"\$REPO/scripts/sync-wallpapers.py\"
 git add wallpapers/
 if git diff --cached --quiet; then
   log 'OK: no changes'

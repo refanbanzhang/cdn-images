@@ -80,8 +80,10 @@ cd \"\$REPO\"
 git fetch origin
 git pull --ff-only origin main
 mkdir -p wallpapers
-# Preserve gallery thumbs/; sync media from Desktop source
-rsync -a --delete --exclude 'index.json' --exclude 'thumbs' \"\$STAGE/\" \"\$REPO/wallpapers/\"
+# Desktop may add/remove images. Never delete repo videos/thumbs Desktop lacks.
+rsync -a --delete --exclude 'index.json' --exclude 'thumbs' --exclude 'thumbs/' --filter 'P thumbs/' --filter 'P thumbs/***' --filter 'P *.mp4' --filter 'P *.MP4' --filter 'P *.webm' --filter 'P *.mov' --filter 'P *.m4v' --filter 'P *.ogv' --exclude '*.mp4' --exclude '*.MP4' --exclude '*.webm' --exclude '*.mov' --exclude '*.m4v' --exclude '*.ogv' \"\$STAGE/\" \"\$REPO/wallpapers/\"
+# Copy/update Desktop videos only; never delete repo-only videos.
+rsync -a --include '*.mp4' --include '*.MP4' --include '*.webm' --include '*.mov' --include '*.m4v' --include '*.ogv' --exclude '*' \"\$STAGE/\" \"\$REPO/wallpapers/\"
 python3 \"\$REPO/scripts/sync-wallpapers.py\"
 git add wallpapers/
 if git diff --cached --quiet; then

@@ -41,6 +41,10 @@ def repo_posix(path: Path) -> str:
     return path.relative_to(ROOT).as_posix()
 
 
+def is_good_thumb(path: Path) -> bool:
+    return path.is_file() and path.stat().st_size > 0
+
+
 def list_media() -> list[Path]:
     files = []
     for path in WALLPAPERS.iterdir():
@@ -57,7 +61,7 @@ def thumb_path_for(src: Path) -> Path:
     return THUMBS / f"{src.stem}.webp"
 
 
-def make_thumb_pillow(src: Path, dest: Path) -> None:
+def write_thumb_pillow(src: Path, dest: Path) -> None:
     try:
         from PIL import Image
     except ImportError as exc:
@@ -69,10 +73,7 @@ def make_thumb_pillow(src: Path, dest: Path) -> None:
         img.save(dest, "WEBP", quality=int(THUMB_QUALITY), method=6)
 
 
-def make_thumb(src: Path, dest: Path) -> None:
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    if dest.is_file() and dest.stat().st_size > 0:
-        return
+def write_thumb_ffmpeg(src: Path, dest: Path) -> None:
     cmd = [
         "ffmpeg",
         "-hide_banner",
@@ -92,16 +93,35 @@ def make_thumb(src: Path, dest: Path) -> None:
         "-quality",
         THUMB_QUALITY,
         "-an",
+        "-f",
+        "webp",
         str(dest),
     ]
+    subprocess.run(cmd, check=True)
+
+
+def make_thumb(src: Path, dest: Path) -> None:
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    if is_good_thumb(dest):
+        return
+
+    # Sibling tmp keeps the .webp suffix so ffmpeg can pick the muxer.
+    tmp = dest.with_name(dest.stem + ".tmp.webp")
+    if tmp.exists():
+        tmp.unlink()
     try:
-        subprocess.run(cmd, check=True)
-    except (FileNotFoundError, subprocess.CalledProcessError):
-        if dest.is_file():
-            dest.unlink()
-        make_thumb_pillow(src, dest)
-    if not dest.is_file() or dest.stat().st_size == 0:
-        raise SyncError(f"empty thumb written for {src.name}")
+        try:
+            write_thumb_ffmpeg(src, tmp)
+        except (FileNotFoundError, subprocess.CalledProcessError):
+            if tmp.exists():
+                tmp.unlink()
+            write_thumb_pillow(src, tmp)
+        if not is_good_thumb(tmp):
+            raise SyncError(f"empty thumb written for {src.name}")
+        tmp.replace(dest)
+    finally:
+        if tmp.exists():
+            tmp.unlink()
 
 
 def catalog_item(src: Path) -> dict:
@@ -120,12 +140,18 @@ def catalog_item(src: Path) -> dict:
     return item
 
 
-def prune_orphan_thumbs(keep: set[Path]) -> None:
-    if not THUMBS.is_dir():
-        return
-    for path in THUMBS.iterdir():
-        if path.is_file() and path not in keep:
+def prune_orphan_thumbs(keep: set[Path]) -> int:
+    """Delete thumbs not in keep. Never wipes the tree when keep is empty."""
+    if not THUMBS.is_dir() or not keep:
+        return 0
+    deleted = 0
+    for path in list(THUMBS.iterdir()):
+        if not path.is_file() or path.suffix.lower() != ".webp":
+            continue
+        if path not in keep:
             path.unlink()
+            deleted += 1
+    return deleted
 
 
 def main() -> int:
@@ -135,31 +161,55 @@ def main() -> int:
     media = list_media()
     items = []
     keep_thumbs: set[Path] = set()
+    image_count = 0
+    failed: list[str] = []
 
     for src in media:
         item = catalog_item(src)
         if item["type"] == "image":
+            image_count += 1
             dest = thumb_path_for(src)
             try:
                 make_thumb(src, dest)
-                keep_thumbs.add(dest)
             except SyncError as exc:
-                if dest.is_file() and dest.stat().st_size > 0:
-                    keep_thumbs.add(dest)
+                if is_good_thumb(dest):
                     print(f"warning: reused existing thumb for {src.name}: {exc}", file=sys.stderr)
                 else:
                     item.pop("thumb", None)
+                    failed.append(f"{src.name}: {exc}")
                     print(f"warning: no thumb for {src.name}: {exc}", file=sys.stderr)
+            if is_good_thumb(dest):
+                keep_thumbs.add(dest)
         items.append(item)
 
-    prune_orphan_thumbs(keep_thumbs)
+    if image_count and not keep_thumbs:
+        raise SyncError(
+            f"thumb generation failed for all {image_count} images; "
+            "refusing to prune existing thumbs or rewrite index"
+        )
+
+    if failed:
+        nfail = len(failed)
+        kind = "largely failed" if nfail * 2 >= image_count else "failed"
+        raise SyncError(
+            f"thumb generation {kind} ({nfail}/{image_count}); "
+            "skipping prune and index write to avoid committing a wipe. "
+            f"first error: {failed[0]}"
+        )
+
+    pruned = prune_orphan_thumbs(keep_thumbs)
+    if not keep_thumbs and THUMBS.is_dir() and any(THUMBS.iterdir()):
+        print("warning: skip prune; keep_thumbs is empty", file=sys.stderr)
 
     catalog = {
         "updatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "items": items,
     }
     INDEX.write_text(json.dumps(catalog, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"indexed {len(items)} items, {len(keep_thumbs)} thumbs -> {repo_posix(INDEX)}")
+    print(
+        f"indexed {len(items)} items, {len(keep_thumbs)} thumbs"
+        f"{f', pruned {pruned}' if pruned else ''} -> {repo_posix(INDEX)}"
+    )
     return 0
 
 

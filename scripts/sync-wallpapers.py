@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Scan wallpapers/, write gallery thumbs, and regenerate wallpapers/index.json.
 
-Originals are never resized. Image items get a long-edge ~480px WebP thumb.
-Video items are catalogued without a thumb field.
+Originals are never resized. Every image and video item gets a long-edge
+~480px WebP thumb. Video thumbs are one decoded frame, same scale/quality
+as image thumbs. Existing thumbs are kept; they are never wiped on failure.
 
 Usage (from repo root):
     python3 scripts/sync-wallpapers.py
@@ -41,8 +42,17 @@ def repo_posix(path: Path) -> str:
     return path.relative_to(ROOT).as_posix()
 
 
+def is_lfs_pointer(path: Path) -> bool:
+    if not path.is_file() or path.stat().st_size > 512:
+        return False
+    try:
+        return path.read_bytes().startswith(b"version https://git-lfs.github.com/spec/v1")
+    except OSError:
+        return False
+
+
 def is_good_thumb(path: Path) -> bool:
-    return path.is_file() and path.stat().st_size > 0
+    return path.is_file() and path.stat().st_size > 0 and not is_lfs_pointer(path)
 
 
 def list_media() -> list[Path]:
@@ -104,17 +114,22 @@ def make_thumb(src: Path, dest: Path) -> None:
     dest.parent.mkdir(parents=True, exist_ok=True)
     if is_good_thumb(dest):
         return
+    if is_lfs_pointer(src):
+        raise SyncError(f"LFS pointer not pulled: {src.name}")
 
     # Sibling tmp keeps the .webp suffix so ffmpeg can pick the muxer.
     tmp = dest.with_name(dest.stem + ".tmp.webp")
     if tmp.exists():
         tmp.unlink()
+    is_video = src.suffix.lower() in VIDEO_EXTS
     try:
         try:
             write_thumb_ffmpeg(src, tmp)
-        except (FileNotFoundError, subprocess.CalledProcessError):
+        except (FileNotFoundError, subprocess.CalledProcessError) as exc:
             if tmp.exists():
                 tmp.unlink()
+            if is_video:
+                raise SyncError(f"ffmpeg failed to extract video thumb for {src.name}") from exc
             write_thumb_pillow(src, tmp)
         if not is_good_thumb(tmp):
             raise SyncError(f"empty thumb written for {src.name}")
@@ -135,8 +150,7 @@ def catalog_item(src: Path) -> dict:
         "ext": ext,
         "size": src.stat().st_size,
     }
-    if not is_video:
-        item["thumb"] = repo_posix(thumb_path_for(src))
+    item["thumb"] = repo_posix(thumb_path_for(src))
     return item
 
 
@@ -161,38 +175,35 @@ def main() -> int:
     media = list_media()
     items = []
     keep_thumbs: set[Path] = set()
-    image_count = 0
     failed: list[str] = []
 
     for src in media:
         item = catalog_item(src)
-        if item["type"] == "image":
-            image_count += 1
-            dest = thumb_path_for(src)
-            try:
-                make_thumb(src, dest)
-            except SyncError as exc:
-                if is_good_thumb(dest):
-                    print(f"warning: reused existing thumb for {src.name}: {exc}", file=sys.stderr)
-                else:
-                    item.pop("thumb", None)
-                    failed.append(f"{src.name}: {exc}")
-                    print(f"warning: no thumb for {src.name}: {exc}", file=sys.stderr)
+        dest = thumb_path_for(src)
+        try:
+            make_thumb(src, dest)
+        except SyncError as exc:
             if is_good_thumb(dest):
-                keep_thumbs.add(dest)
+                print(f"warning: reused existing thumb for {src.name}: {exc}", file=sys.stderr)
+            else:
+                item.pop("thumb", None)
+                failed.append(f"{src.name}: {exc}")
+                print(f"warning: no thumb for {src.name}: {exc}", file=sys.stderr)
+        if is_good_thumb(dest):
+            keep_thumbs.add(dest)
         items.append(item)
 
-    if image_count and not keep_thumbs:
+    if media and not keep_thumbs:
         raise SyncError(
-            f"thumb generation failed for all {image_count} images; "
+            f"thumb generation failed for all {len(media)} items; "
             "refusing to prune existing thumbs or rewrite index"
         )
 
     if failed:
         nfail = len(failed)
-        kind = "largely failed" if nfail * 2 >= image_count else "failed"
+        kind = "largely failed" if nfail * 2 >= len(media) else "failed"
         raise SyncError(
-            f"thumb generation {kind} ({nfail}/{image_count}); "
+            f"thumb generation {kind} ({nfail}/{len(media)}); "
             "skipping prune and index write to avoid committing a wipe. "
             f"first error: {failed[0]}"
         )

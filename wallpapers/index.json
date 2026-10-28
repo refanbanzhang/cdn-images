@@ -1,13 +1,38 @@
 {
-  "updatedAt": "2026-10-28T04:01:04Z",
+  "updatedAt": "2026-10-28T04:04:44Z",
   "items": [
+    {
+      "path": "wallpapers/007cf3ed-ae4a-4b10-a8d2-c33b61cc363f.mp4",
+      "name": "007cf3ed-ae4a-4b10-a8d2-c33b61cc363f.mp4",
+      "title": "007cf3ed-ae4a-4b10-a8d2-c33b61cc363f",
+      "type": "video",
+      "ext": "mp4",
+      "size": 175233086
+    },
+    {
+      "path": "wallpapers/2d0d311f-1486-414b-aa40-fc098ed96745.mp4",
+      "name": "2d0d311f-1486-414b-aa40-fc098ed96745.mp4",
+      "title": "2d0d311f-1486-414b-aa40-fc098ed96745",
+      "type": "video",
+      "ext": "mp4",
+      "size": 18367168
+    },
+    {
+      "path": "wallpapers/390268d3-92b8-4741-84a3-f7fcb5e1fb2a.mp4",
+      "name": "390268d3-92b8-4741-84a3-f7fcb5e1fb2a.mp4",
+      "title": "390268d3-92b8-4741-84a3-f7fcb5e1fb2a",
+      "type": "video",
+      "ext": "mp4",
+      "size": 25302036
+    },
     {
       "path": "wallpapers/人物 - 双手托腮清纯美女.jpg",
       "name": "人物 - 双手托腮清纯美女.jpg",
       "title": "人物 - 双手托腮清纯美女",
       "type": "image",
       "ext": "jpg",
-      "size": 5396626
+      "size": 5396626,
+      "thumb": "wallpapers/thumbs/人物 - 双手托腮清纯美女.webp"
     },
     {
       "path": "wallpapers/人物 - 绿发双马尾cos少女.jpg",
@@ -15,7 +40,8 @@
       "title": "人物 - 绿发双马尾cos少女",
       "type": "image",
       "ext": "jpg",
-      "size": 9214043
+      "size": 9214043,
+      "thumb": "wallpapers/thumbs/人物 - 绿发双马尾cos少女.webp"
     },
     {
       "path": "wallpapers/宇宙 - 紫红星云.jpg",
@@ -23,7 +49,8 @@
       "title": "宇宙 - 紫红星云",
       "type": "image",
       "ext": "jpg",
-      "size": 2535233
+      "size": 2535233,
+      "thumb": "wallpapers/thumbs/宇宙 - 紫红星云.webp"
     },
     {
       "path": "wallpapers/家居 - 厨房厨具冰箱阳光.jpg",
@@ -31,7 +58,8 @@
       "title": "家居 - 厨房厨具冰箱阳光",
       "type": "image",
       "ext": "jpg",
-      "size": 4213736
+      "size": 4213736,
+      "thumb": "wallpapers/thumbs/家居 - 厨房厨具冰箱阳光.webp"
     },
     {
       "path": "wallpapers/插画 - 戴眼镜女生.jpg",
@@ -39,7 +67,8 @@
       "title": "插画 - 戴眼镜女生",
       "type": "image",
       "ext": "jpg",
-      "size": 6608562
+      "size": 6608562,
+      "thumb": "wallpapers/thumbs/插画 - 戴眼镜女生.webp"
     },
     {
       "path": "wallpapers/摄影 - 云雾绿坡与雪山（Jerry Kavan·Unsplash）.jpg",
@@ -47,7 +76,8 @@
       "title": "摄影 - 云雾绿坡与雪山（Jerry Kavan·Unsplash）",
       "type": "image",
       "ext": "jpg",
-      "size": 2533430
+      "size": 2533430,
+      "thumb": "wallpapers/thumbs/摄影 - 云雾绿坡与雪山（Jerry Kavan·Unsplash）.webp"
     },
     {
       "path": "wallpapers/摄影 - 山脊彩虹草甸（Pascal Debrunner·Unsplash）.jpg",
@@ -55,7 +85,8 @@
       "title": "摄影 - 山脊彩虹草甸（Pascal Debrunner·Unsplash）",
       "type": "image",
       "ext": "jpg",
-      "size": 3934802
+      "size": 3934802,
+      "thumb": "wallpapers/thumbs/摄影 - 山脊彩虹草甸（Pascal Debrunner·Unsplash）.webp"
     },
     {
       "path": "wallpapers/摄影 - 松林晨曦逆光（Daniel Peters·Unsplash）.jpg",
@@ -63,7 +94,8 @@
       "title": "摄影 - 松林晨曦逆光（Daniel Peters·Unsplash）",
       "type": "image",
       "ext": "jpg",
-      "size": 2807706
+      "size": 2807706,
+      "thumb": "wallpapers/thumbs/摄影 - 松林晨曦逆光（Daniel Peters·Unsplash）.webp"
     },
     {
       "path": "wallpapers/摄影 - 航拍田野拼布（Gautier Pfeiffer·Unsplash）.jpg",
@@ -71,7 +103,8 @@
       "title": "摄影 - 航拍田野拼布（Gautier Pfeiffer·Unsplash）",
       "type": "image",
       "ext": "jpg",
-      "size": 6313053
+      "size": 6313053,
+      "thumb": "wallpapers/thumbs/摄影 - 航拍田野拼布（Gautier Pfeiffer·Unsplash）.webp"
     },
     {
       "path": "wallpapers/摄影 - 航拍秋色树冠（Kristaps Ungurs·Unsplash）.jpg",
@@ -79,7 +112,8 @@
       "title": "摄影 - 航拍秋色树冠（Kristaps Ungurs·Unsplash）",
       "type": "image",
       "ext": "jpg",
-      "size": 8010638
+      "size": 8010638,
+      "thumb": "wallpapers/thumbs/摄影 - 航拍秋色树冠（Kristaps Ungurs·Unsplash）.webp"
     },
     {
       "path": "wallpapers/摄影 - 航拍红树林水道（Rod Long·Unsplash）.jpg",
@@ -87,7 +121,8 @@
       "title": "摄影 - 航拍红树林水道（Rod Long·Unsplash）",
       "type": "image",
       "ext": "jpg",
-      "size": 5917410
+      "size": 5917410,
+      "thumb": "wallpapers/thumbs/摄影 - 航拍红树林水道（Rod Long·Unsplash）.webp"
     },
     {
       "path": "wallpapers/风景 - 云端秋色山丘森林（WallpaperMaiden）.png",
@@ -95,7 +130,8 @@
       "title": "风景 - 云端秋色山丘森林（WallpaperMaiden）",
       "type": "image",
       "ext": "png",
-      "size": 14784720
+      "size": 14784720,
+      "thumb": "wallpapers/thumbs/风景 - 云端秋色山丘森林（WallpaperMaiden）.webp"
     },
     {
       "path": "wallpapers/风景 - 山脉天空（WallpaperMaiden）.png",
@@ -103,7 +139,8 @@
       "title": "风景 - 山脉天空（WallpaperMaiden）",
       "type": "image",
       "ext": "png",
-      "size": 13260264
+      "size": 13260264,
+      "thumb": "wallpapers/thumbs/风景 - 山脉天空（WallpaperMaiden）.webp"
     },
     {
       "path": "wallpapers/风景 - 山谷心形小湖蒙塔尼翁湖.jpg",
@@ -111,7 +148,8 @@
       "title": "风景 - 山谷心形小湖蒙塔尼翁湖",
       "type": "image",
       "ext": "jpg",
-      "size": 7985947
+      "size": 7985947,
+      "thumb": "wallpapers/thumbs/风景 - 山谷心形小湖蒙塔尼翁湖.webp"
     },
     {
       "path": "wallpapers/风景 - 幽蓝夜色雪峰.jpg",
@@ -119,7 +157,8 @@
       "title": "风景 - 幽蓝夜色雪峰",
       "type": "image",
       "ext": "jpg",
-      "size": 2595345
+      "size": 2595345,
+      "thumb": "wallpapers/thumbs/风景 - 幽蓝夜色雪峰.webp"
     },
     {
       "path": "wallpapers/风景 - 日照金山雪峰云海.jpg",
@@ -127,7 +166,8 @@
       "title": "风景 - 日照金山雪峰云海",
       "type": "image",
       "ext": "jpg",
-      "size": 3069497
+      "size": 3069497,
+      "thumb": "wallpapers/thumbs/风景 - 日照金山雪峰云海.webp"
     },
     {
       "path": "wallpapers/风景 - 星空下的雪山夜色.jpg",
@@ -135,7 +175,8 @@
       "title": "风景 - 星空下的雪山夜色",
       "type": "image",
       "ext": "jpg",
-      "size": 10192920
+      "size": 10192920,
+      "thumb": "wallpapers/thumbs/风景 - 星空下的雪山夜色.webp"
     },
     {
       "path": "wallpapers/风景 - 泰国攀牙湾红树林.jpg",
@@ -143,7 +184,8 @@
       "title": "风景 - 泰国攀牙湾红树林",
       "type": "image",
       "ext": "jpg",
-      "size": 7162488
+      "size": 7162488,
+      "thumb": "wallpapers/thumbs/风景 - 泰国攀牙湾红树林.webp"
     },
     {
       "path": "wallpapers/风景 - 秋天城堡树林草地.jpg",
@@ -151,7 +193,8 @@
       "title": "风景 - 秋天城堡树林草地",
       "type": "image",
       "ext": "jpg",
-      "size": 3868490
+      "size": 3868490,
+      "thumb": "wallpapers/thumbs/风景 - 秋天城堡树林草地.webp"
     },
     {
       "path": "wallpapers/风景 - 自然山脉.jpg",
@@ -159,7 +202,8 @@
       "title": "风景 - 自然山脉",
       "type": "image",
       "ext": "jpg",
-      "size": 2331923
+      "size": 2331923,
+      "thumb": "wallpapers/thumbs/风景 - 自然山脉.webp"
     },
     {
       "path": "wallpapers/风景 - 航拍心形礁石海湾.jpg",
@@ -167,7 +211,8 @@
       "title": "风景 - 航拍心形礁石海湾",
       "type": "image",
       "ext": "jpg",
-      "size": 3551546
+      "size": 3551546,
+      "thumb": "wallpapers/thumbs/风景 - 航拍心形礁石海湾.webp"
     },
     {
       "path": "wallpapers/风景 - 航拍雪顶山峰针叶林.jpg",
@@ -175,7 +220,8 @@
       "title": "风景 - 航拍雪顶山峰针叶林",
       "type": "image",
       "ext": "jpg",
-      "size": 2628464
+      "size": 2628464,
+      "thumb": "wallpapers/thumbs/风景 - 航拍雪顶山峰针叶林.webp"
     },
     {
       "path": "wallpapers/风景 - 蓝铃花森林阳光.jpg",
@@ -183,7 +229,8 @@
       "title": "风景 - 蓝铃花森林阳光",
       "type": "image",
       "ext": "jpg",
-      "size": 8902983
+      "size": 8902983,
+      "thumb": "wallpapers/thumbs/风景 - 蓝铃花森林阳光.webp"
     },
     {
       "path": "wallpapers/风景 - 贵州梵净山.jpg",
@@ -191,7 +238,8 @@
       "title": "风景 - 贵州梵净山",
       "type": "image",
       "ext": "jpg",
-      "size": 4690594
+      "size": 4690594,
+      "thumb": "wallpapers/thumbs/风景 - 贵州梵净山.webp"
     },
     {
       "path": "wallpapers/风景 - 阿尔卑斯山乡村（Dolomite）.jpg",
@@ -199,7 +247,8 @@
       "title": "风景 - 阿尔卑斯山乡村（Dolomite）",
       "type": "image",
       "ext": "jpg",
-      "size": 7742166
+      "size": 7742166,
+      "thumb": "wallpapers/thumbs/风景 - 阿尔卑斯山乡村（Dolomite）.webp"
     }
   ]
 }

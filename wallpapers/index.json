@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-28T04:04:44Z",
+  "updatedAt": "2026-10-28T04:25:19Z",
   "items": [
     {
       "path": "wallpapers/007cf3ed-ae4a-4b10-a8d2-c33b61cc363f.mp4",
@@ -7,7 +7,8 @@
       "title": "007cf3ed-ae4a-4b10-a8d2-c33b61cc363f",
       "type": "video",
       "ext": "mp4",
-      "size": 175233086
+      "size": 175233086,
+      "thumb": "wallpapers/thumbs/007cf3ed-ae4a-4b10-a8d2-c33b61cc363f.webp"
     },
     {
       "path": "wallpapers/2d0d311f-1486-414b-aa40-fc098ed96745.mp4",
@@ -15,7 +16,8 @@
       "title": "2d0d311f-1486-414b-aa40-fc098ed96745",
       "type": "video",
       "ext": "mp4",
-      "size": 18367168
+      "size": 18367168,
+      "thumb": "wallpapers/thumbs/2d0d311f-1486-414b-aa40-fc098ed96745.webp"
     },
     {
       "path": "wallpapers/390268d3-92b8-4741-84a3-f7fcb5e1fb2a.mp4",
@@ -23,7 +25,8 @@
       "title": "390268d3-92b8-4741-84a3-f7fcb5e1fb2a",
       "type": "video",
       "ext": "mp4",
-      "size": 25302036
+      "size": 25302036,
+      "thumb": "wallpapers/thumbs/390268d3-92b8-4741-84a3-f7fcb5e1fb2a.webp"
     },
     {
       "path": "wallpapers/人物 - 双手托腮清纯美女.jpg",
